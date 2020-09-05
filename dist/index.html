@@ -20,10 +20,106 @@
 
   <body>
     <div class="container">
+      <form id="register-form" action="" method="POST">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input id="username" type="text" name="username" />
+          <p data-error="username"></p>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input id="password" type="text" name="password" />
+          <p data-error="password"></p>
+        </div>
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password</label>
+          <input id="confirmPassword" type="text" name="confirmPassword" />
+          <p data-error="confirmPassword"></p>
+        </div>
+        <br />
+        <button>Submit</button>
+      </form>
     </div>
 
     <script src="./damedane.min.js"></script>
     <script>
+      const $registerForm = document.querySelector('#register-form');
+
+      const usernameRequired = (values) => {
+        const { username } = values;
+
+        return {
+          name: 'username',
+          isError: !username.length,
+          message: 'Username is required',
+        };
+      };
+
+      const usernameInvalidLength = (values) => {
+        const { username } = values;
+
+        return {
+          name: 'username',
+          isError: !(username.length >= 5 && username.length <= 10),
+          message: 'Username at least minimum 5 characters and maximum 10 characters',
+        };
+      };
+
+      const passwordRequired = (values) => {
+        const { password } = values;
+
+        return {
+          name: 'password',
+          isError: !password.length,
+          message: 'Password is required',
+        };
+      };
+
+      const passwordInvalidLength = (values) => {
+        const { password } = values;
+
+        return {
+          name: 'password',
+          isError: !(password.length >= 8 && password.length <= 50),
+          message: 'Password at least minimum 8 characters and maximum 50 characters',
+        };
+      };
+
+      const confirmPasswordRequired = (values) => {
+        const { confirmPassword } = values;
+
+        return {
+          name: 'confirmPassword',
+          isError: !confirmPassword.length,
+          message: 'Confirm Password is required',
+        };
+      };
+
+      const confirmPasswordNotMatch = (values) => {
+        const { confirmPassword, password } = values;
+
+        return {
+          name: 'confirmPassword',
+          isError: confirmPassword !== password,
+          message: 'Confirm Password is not match',
+        };
+      };
+
+      new Damedane($registerForm, {
+        values: {
+          username: "",
+          password: "",
+          confirmPassword: "",
+        },
+        rules: [
+          usernameRequired,
+          usernameInvalidLength,
+          passwordRequired,
+          passwordInvalidLength,
+          confirmPasswordRequired,
+          confirmPasswordNotMatch,
+        ],
+      });
     </script>
   </body>
 </html>
