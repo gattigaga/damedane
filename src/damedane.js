@@ -19,6 +19,9 @@ const damedane = ($form, options = {}) => {
   // Rules used to validate values.
   const rules = options.rules ? [...options.rules] : []
 
+  // Rules that errors
+  let errors = []
+
   /**
    * Set default values to form inputs.
    */
@@ -36,14 +39,14 @@ const damedane = ($form, options = {}) => {
    * Validate values based on defined rules.
    */
   const validate = () => {
-    const errorRules = rules
+    errors = rules
       .map(rule => rule(values))
       .filter(rule => rule.isError)
 
     Object
       .keys(values)
       .forEach(name => {
-        const rule = errorRules.find(rule => rule.name === name)
+        const rule = errors.find(rule => rule.name === name)
         const $message = $form.querySelector(`[data-error=${name}]`)
 
         if (!$message) return
@@ -53,9 +56,9 @@ const damedane = ($form, options = {}) => {
   }
 
   /**
-   * Listen everytime user change input values.
+   * Listen everytime user change input values and prevent submit if has errors.
    */
-  const listenChanges = () => {
+  const listen = () => {
     const inputNames = Object.keys(values)
 
     inputNames.forEach(name => {
@@ -69,11 +72,19 @@ const damedane = ($form, options = {}) => {
         })
       }
     })
+
+    $form.addEventListener('submit', (event) => {
+      const hasError = !!errors.length
+
+      if (hasError) {
+        event.preventDefault()
+      }
+    })
   }
 
   initialize()
   validate()
-  listenChanges()
+  listen()
 }
 
 export default damedane
