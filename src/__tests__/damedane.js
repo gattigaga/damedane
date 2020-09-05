@@ -53,7 +53,7 @@ describe('Damedane', () => {
     expect(inputPassword.value).toBe('mishimakiller')
   })
 
-  it('should runs the validation rules', () => {
+  it('should runs the validation rules', async () => {
     const $main = initDOM()
     const $form = getByTestId($main, 'form')
 
@@ -127,5 +127,11 @@ describe('Damedane', () => {
 
     expect(errorUsername).toHaveTextContent('Username at least minimum 5 characters and maximum 10 characters')
     expect(errorPassword).toHaveTextContent('Password at least minimum 8 characters and maximum 50 characters')
+
+    fireEvent.input(inputUsername, { target: { value: 'claudio' } })
+    fireEvent.input(inputPassword, { target: { value: 'serafino' } })
+
+    expect(errorUsername).toHaveTextContent('')
+    expect(errorPassword).toHaveTextContent('')
   })
 })
