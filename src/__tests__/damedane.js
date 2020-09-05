@@ -26,6 +26,12 @@ describe('Damedane', () => {
     return $container
   }
 
+  it('should failed to initialize', () => {
+    const initialize = () => damedane(null, {})
+
+    expect(initialize).toThrowError('Passed element is not a valid HTML Form element.')
+  })
+
   it('should set default value', () => {
     const $main = initDOM()
     const $form = getByTestId($main, 'form')

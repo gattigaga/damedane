@@ -7,6 +7,12 @@
  * @param {Function[]} options.rules Rules used to validate values.
  */
 const damedane = ($form, options = {}) => {
+  const isValidElement = $form instanceof HTMLFormElement
+
+  if (!isValidElement) {
+    throw new Error('Passed element is not a valid HTML Form element.')
+  }
+
   // Values of form inputs.
   const values = options.values ? { ...options.values } : {}
 
