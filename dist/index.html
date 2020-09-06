@@ -105,7 +105,7 @@
         };
       };
 
-      new Damedane($registerForm, {
+      damedane($registerForm, {
         values: {
           username: "",
           password: "",
@@ -119,6 +119,7 @@
           confirmPasswordRequired,
           confirmPasswordNotMatch,
         ],
+        runsOn: "change",
       });
     </script>
   </body>

@@ -7,7 +7,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'damedane.min.js',
-    library: 'Damedane',
+    library: 'damedane',
     libraryTarget: 'umd',
     libraryExport: 'default'
   },
