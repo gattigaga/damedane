@@ -93,10 +93,12 @@ describe('Damedane', () => {
     expect(inputPassword.value).toBe('mishimakiller')
   })
 
-  it('should runs the validation rules everytime value changes', async () => {
+  it('should runs the validation rules everytime value changed in an element', async () => {
     const $main = initDOM()
     const $form = getByTestId($main, 'form')
 
+    const inputUsername = getByLabelText($form, 'Username')
+    const inputPassword = getByLabelText($form, 'Password')
     const errorUsername = getByTestId($form, 'error-username')
     const errorPassword = getByTestId($form, 'error-password')
 
@@ -113,24 +115,44 @@ describe('Damedane', () => {
         usernameHasInvalidLength,
         passwordIsRequired,
         passwordHasInvalidLength
-      ],
-      runsOn: 'change'
+      ]
     })
 
-    expect(errorUsername).toHaveTextContent('Username is required')
-    expect(errorPassword).toHaveTextContent('Password is required')
+    expect(errorUsername).toHaveTextContent('')
+    expect(errorPassword).toHaveTextContent('')
 
-    const inputUsername = getByLabelText($form, 'Username')
-    const inputPassword = getByLabelText($form, 'Password')
+    fireEvent.change(inputUsername, {
+      target: {
+        value: 'jin'
+      }
+    })
 
-    fireEvent.input(inputUsername, { target: { value: 'jin' } })
-    fireEvent.input(inputPassword, { target: { value: 'kazama' } })
+    expect(errorUsername).toHaveTextContent('Username at least minimum 5 characters and maximum 10 characters')
+    expect(errorPassword).toHaveTextContent('')
+
+    fireEvent.change(inputPassword, {
+      target: {
+        value: 'kazama'
+      }
+    })
 
     expect(errorUsername).toHaveTextContent('Username at least minimum 5 characters and maximum 10 characters')
     expect(errorPassword).toHaveTextContent('Password at least minimum 8 characters and maximum 50 characters')
 
-    fireEvent.input(inputUsername, { target: { value: 'claudio' } })
-    fireEvent.input(inputPassword, { target: { value: 'serafino' } })
+    fireEvent.change(inputUsername, {
+      target: {
+        value: 'claudio'
+      }
+    })
+
+    expect(errorUsername).toHaveTextContent('')
+    expect(errorPassword).toHaveTextContent('Password at least minimum 8 characters and maximum 50 characters')
+
+    fireEvent.change(inputPassword, {
+      target: {
+        value: 'serafino'
+      }
+    })
 
     expect(errorUsername).toHaveTextContent('')
     expect(errorPassword).toHaveTextContent('')

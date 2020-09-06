@@ -19,10 +19,6 @@ const damedane = ($form, options = {}) => {
   // Rules used to validate values.
   const rules = options.rules ? [...options.rules] : []
 
-  // Mode that validation runs on.
-  // It can be "change", "blur", or "submit".
-  const runsOn = options.runsOn || 'change'
-
   // Rules that errors
   let errors = []
 
@@ -30,33 +26,27 @@ const damedane = ($form, options = {}) => {
    * Set default values to form inputs.
    */
   const initialize = () => {
-    const valueEntries = Object.entries(values)
-
-    for (const [key, value] of valueEntries) {
+    Object.entries(values).forEach(([key, value]) => {
       const $input = $form.querySelector(`[name=${key}]`)
 
       $input.value = value
-    }
+    })
   }
 
   /**
-   * Validate values based on defined rules.
+   * Validate a value based on defined rules.
    */
-  const validate = () => {
+  const validate = (name) => {
     errors = rules
       .map(rule => rule(values))
       .filter(rule => rule.isError)
 
-    Object
-      .keys(values)
-      .forEach(name => {
-        const rule = errors.find(rule => rule.name === name)
-        const $message = $form.querySelector(`[data-error=${name}]`)
+    const rule = errors.find(rule => rule.name === name)
+    const $message = $form.querySelector(`[data-error=${name}]`)
 
-        if (!$message) return
-
-        $message.textContent = rule ? rule.message : ''
-      })
+    if ($message) {
+      $message.textContent = rule ? rule.message : ''
+    }
   }
 
   /**
@@ -69,15 +59,17 @@ const damedane = ($form, options = {}) => {
       const $input = $form.querySelector(`[name=${name}]`)
 
       if ($input) {
-        $input.addEventListener('input', (event) => {
+        $input.addEventListener('change', (event) => {
           values[name] = event.target.value
 
-          validate()
+          validate(name)
         })
       }
     })
 
     $form.addEventListener('submit', (event) => {
+      inputNames.forEach(validate)
+
       const hasError = !!errors.length
 
       if (hasError) {
@@ -87,7 +79,6 @@ const damedane = ($form, options = {}) => {
   }
 
   initialize()
-  validate()
   listen()
 }
 
