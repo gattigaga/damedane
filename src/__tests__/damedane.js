@@ -26,6 +26,46 @@ describe('Damedane', () => {
     return $container
   }
 
+  const usernameIsRequired = (values) => {
+    const { username } = values
+
+    return {
+      name: 'username',
+      isError: !username.length,
+      message: 'Username is required'
+    }
+  }
+
+  const usernameHasInvalidLength = (values) => {
+    const { username } = values
+
+    return {
+      name: 'username',
+      isError: !(username.length >= 5 && username.length <= 10),
+      message: 'Username at least minimum 5 characters and maximum 10 characters'
+    }
+  }
+
+  const passwordIsRequired = (values) => {
+    const { password } = values
+
+    return {
+      name: 'password',
+      isError: !password.length,
+      message: 'Password is required'
+    }
+  }
+
+  const passwordHasInvalidLength = (values) => {
+    const { password } = values
+
+    return {
+      name: 'password',
+      isError: !(password.length >= 8 && password.length <= 50),
+      message: 'Password at least minimum 8 characters and maximum 50 characters'
+    }
+  }
+
   it('should failed to initialize', () => {
     const initialize = () => damedane(null, {})
 
@@ -53,7 +93,7 @@ describe('Damedane', () => {
     expect(inputPassword.value).toBe('mishimakiller')
   })
 
-  it('should runs the validation rules', async () => {
+  it('should runs the validation rules everytime value changes', async () => {
     const $main = initDOM()
     const $form = getByTestId($main, 'form')
 
@@ -62,46 +102,6 @@ describe('Damedane', () => {
 
     expect(errorUsername).toHaveTextContent('')
     expect(errorPassword).toHaveTextContent('')
-
-    const usernameIsRequired = (values) => {
-      const { username } = values
-
-      return {
-        name: 'username',
-        isError: !username.length,
-        message: 'Username is required'
-      }
-    }
-
-    const usernameHasInvalidLength = (values) => {
-      const { username } = values
-
-      return {
-        name: 'username',
-        isError: !(username.length >= 5 && username.length <= 10),
-        message: 'Username at least minimum 5 characters and maximum 10 characters'
-      }
-    }
-
-    const passwordIsRequired = (values) => {
-      const { password } = values
-
-      return {
-        name: 'password',
-        isError: !password.length,
-        message: 'Password is required'
-      }
-    }
-
-    const passwordHasInvalidLength = (values) => {
-      const { password } = values
-
-      return {
-        name: 'password',
-        isError: !(password.length >= 8 && password.length <= 50),
-        message: 'Password at least minimum 8 characters and maximum 50 characters'
-      }
-    }
 
     damedane($form, {
       values: {
@@ -113,7 +113,8 @@ describe('Damedane', () => {
         usernameHasInvalidLength,
         passwordIsRequired,
         passwordHasInvalidLength
-      ]
+      ],
+      runsOn: 'change'
     })
 
     expect(errorUsername).toHaveTextContent('Username is required')

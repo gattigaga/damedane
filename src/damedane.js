@@ -19,6 +19,10 @@ const damedane = ($form, options = {}) => {
   // Rules used to validate values.
   const rules = options.rules ? [...options.rules] : []
 
+  // Mode that validation runs on.
+  // It can be "change", "blur", or "submit".
+  const runsOn = options.runsOn || 'change'
+
   // Rules that errors
   let errors = []
 
