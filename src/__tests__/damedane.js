@@ -1,4 +1,4 @@
-import { getByLabelText, getByTestId, fireEvent } from '@testing-library/dom'
+import { getByLabelText, getByTestId, fireEvent, getByText, waitFor } from '@testing-library/dom'
 
 import damedane from '../damedane'
 
@@ -93,7 +93,7 @@ describe('Damedane', () => {
     expect(inputPassword.value).toBe('mishimakiller')
   })
 
-  it('should runs the validation rules everytime value changed in an element', async () => {
+  it('should runs the validation rules everytime value changed in an element', () => {
     const $main = initDOM()
     const $form = getByTestId($main, 'form')
 
@@ -121,7 +121,7 @@ describe('Damedane', () => {
     expect(errorUsername).toHaveTextContent('')
     expect(errorPassword).toHaveTextContent('')
 
-    fireEvent.change(inputUsername, {
+    fireEvent.input(inputUsername, {
       target: {
         value: 'jin'
       }
@@ -130,25 +130,25 @@ describe('Damedane', () => {
     expect(errorUsername).toHaveTextContent('Username at least minimum 5 characters and maximum 10 characters')
     expect(errorPassword).toHaveTextContent('')
 
-    fireEvent.change(inputPassword, {
-      target: {
-        value: 'kazama'
-      }
-    })
-
-    expect(errorUsername).toHaveTextContent('Username at least minimum 5 characters and maximum 10 characters')
-    expect(errorPassword).toHaveTextContent('Password at least minimum 8 characters and maximum 50 characters')
-
-    fireEvent.change(inputUsername, {
+    fireEvent.input(inputUsername, {
       target: {
         value: 'claudio'
       }
     })
 
     expect(errorUsername).toHaveTextContent('')
+    expect(errorPassword).toHaveTextContent('')
+
+    fireEvent.input(inputPassword, {
+      target: {
+        value: 'kazama'
+      }
+    })
+
+    expect(errorUsername).toHaveTextContent('')
     expect(errorPassword).toHaveTextContent('Password at least minimum 8 characters and maximum 50 characters')
 
-    fireEvent.change(inputPassword, {
+    fireEvent.input(inputPassword, {
       target: {
         value: 'serafino'
       }
@@ -156,5 +156,34 @@ describe('Damedane', () => {
 
     expect(errorUsername).toHaveTextContent('')
     expect(errorPassword).toHaveTextContent('')
+  })
+
+  it('should runs the validation rules after form submitted', async () => {
+    const $main = initDOM()
+    const $form = getByTestId($main, 'form')
+
+    const errorUsername = getByTestId($form, 'error-username')
+    const errorPassword = getByTestId($form, 'error-password')
+
+    expect(errorUsername).toHaveTextContent('')
+    expect(errorPassword).toHaveTextContent('')
+
+    damedane($form, {
+      values: {
+        username: '',
+        password: ''
+      },
+      rules: [
+        usernameIsRequired,
+        usernameHasInvalidLength,
+        passwordIsRequired,
+        passwordHasInvalidLength
+      ]
+    })
+
+    fireEvent.submit($form)
+
+    expect(errorUsername).toHaveTextContent('Username is required')
+    expect(errorPassword).toHaveTextContent('Password is required')
   })
 })

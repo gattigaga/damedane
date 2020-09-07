@@ -59,7 +59,7 @@ const damedane = ($form, options = {}) => {
       const $input = $form.querySelector(`[name=${name}]`)
 
       if ($input) {
-        $input.addEventListener('change', (event) => {
+        $input.addEventListener('input', (event) => {
           values[name] = event.target.value
 
           validate(name)
