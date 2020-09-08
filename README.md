@@ -70,11 +70,13 @@ import damedane from "damedane";
         <div>
           <label for="username">Username</label>
           <input id="username" type="text" name="username" />
+          <!-- "data-error" attribute should be same with the "name" attribute. Error message will appear here. -->
           <p data-error="username"></p>
         </div>
         <div>
           <label for="password">Password</label>
           <input id="password" type="password" name="password" />
+          <!-- "data-error" attribute should be same with the "name" attribute. Error message will appear here. -->
           <p data-error="password"></p>
         </div>
         <br />
