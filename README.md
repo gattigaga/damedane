@@ -123,9 +123,7 @@ import damedane from "damedane";
 </html>
 ```
 
-## Example
-
-```TODO: Create an example here.```
+[Access the working example here.](https://codesandbox.io/s/damedane-example-eove2)
 
 ## Options
 
