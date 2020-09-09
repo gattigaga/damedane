@@ -1,7 +1,7 @@
 {
   "name": "damedane",
   "version": "1.0.0",
-  "description": "Damedane is a form flow used for validation.",
+  "description": "Damedane is a small form validation library.",
   "main": "index.js",
   "scripts": {
     "test": "jest",
