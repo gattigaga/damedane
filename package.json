@@ -2,7 +2,7 @@
   "name": "damedane",
   "version": "1.0.0",
   "description": "Damedane is a small form validation library.",
-  "main": "index.js",
+  "main": "dist/damedane.mod.js",
   "scripts": {
     "test": "jest",
     "start": "webpack-dev-server --open --config webpack.dev.js",
